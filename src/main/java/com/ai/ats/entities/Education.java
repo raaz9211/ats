@@ -12,12 +12,8 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-//@Document(indexName = "resumes")
-//@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Education {
-
-//    @Id
-//    private String id;
 
     @Field(type = FieldType.Text)
     private String degree;

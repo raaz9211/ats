@@ -7,7 +7,6 @@ import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.ai.ats.entities.Resume;
-import com.ai.ats.models.ResumeDto;
 import com.ai.ats.models.ResumeSearchResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,20 +20,23 @@ import java.util.List;
 @Slf4j
 public class ResumeService {
 
+
     @Autowired
     private ElasticsearchClient elasticsearchClient;
 
     private static final String RESUME_INDEX = "resumes";
 
     public boolean bulkInsertResumes(List<Resume> resumeList) throws IOException {
-        BulkRequest.Builder builder = new BulkRequest.Builder();
-        resumeList.forEach(resume -> builder.operations(op -> op
-                .index(i -> i
-                        .index(RESUME_INDEX)
-                        .id(String.valueOf(resume.getId()))
-                        .document(resume)))
-        );
-        BulkResponse bulkResponse = elasticsearchClient.bulk(builder.build());
+        BulkRequest.Builder br = new BulkRequest.Builder();
+        for (Resume doc : resumeList) {
+            br.operations(op -> op
+                    .index(idx -> idx
+                            .index(RESUME_INDEX)
+                            .id(doc.getId())
+                            .document(doc))
+            );
+        }
+        BulkResponse bulkResponse = elasticsearchClient.bulk(br.build());
 
 
         // Log errors, if any
@@ -54,9 +56,17 @@ public class ResumeService {
         SearchRequest searchRequest = SearchRequest.of(s -> s
                 .index(RESUME_INDEX)
                 .query(q -> q
-                        .multiMatch(t -> t
-                                .fields("name")
-                                .query(search)
+                        .functionScore(fs -> fs
+                                .query(qry -> qry
+                                        .bool(b -> b
+                                                .should(shd -> shd
+                                                        .match(t -> t
+                                                                .field("skills")
+                                                                .query(search)
+                                                        )
+                                                )
+                                        )
+                                )
                         )
                 )
         );

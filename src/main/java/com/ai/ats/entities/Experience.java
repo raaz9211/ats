@@ -13,12 +13,8 @@ import org.springframework.data.elasticsearch.annotations.Mapping;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-//@Document(indexName = "resumes")
-//@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Experience {
-
-//    @Id
-//    private String id;
 
     @Field(type = FieldType.Text)
     private String title;

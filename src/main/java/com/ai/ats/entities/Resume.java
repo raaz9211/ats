@@ -34,10 +34,10 @@ public class Resume {
     @Field(type = FieldType.Text, store = true)
     private List<String> skills;
 
-    @Field(type = FieldType.Nested)
+    @Field(type = FieldType.Nested, store = true)
     private List<Experience> experiences;
 
-    @Field(type = FieldType.Nested)
+    @Field(type = FieldType.Nested, store = true)
     private List<Education> educations;
 
 }

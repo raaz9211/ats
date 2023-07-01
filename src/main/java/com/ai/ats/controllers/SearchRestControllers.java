@@ -33,9 +33,4 @@ public class SearchRestControllers {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @RequestMapping("/hi")
-    public String hi(){
-        return "hi";
-    }
-
 }
