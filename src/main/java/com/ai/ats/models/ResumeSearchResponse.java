@@ -5,8 +5,6 @@ import com.ai.ats.entities.Experience;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.List;
 
@@ -23,9 +21,13 @@ public class ResumeSearchResponse {
 
     private String phone;
 
+    private String address;
+
+    private String summary;
+
     private List<String> skills;
 
-    private List<Experience> experiences;
+    private List<Experience> experience;
 
-    private List<Education> educations;
+    private List<Education> education;
 }

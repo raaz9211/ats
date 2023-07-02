@@ -3,6 +3,7 @@ package com.ai.ats.controllers;
 import com.ai.ats.entities.Resume;
 import com.ai.ats.models.ResumeSearchResponse;
 import com.ai.ats.service.ResumeService;
+import com.ai.ats.service.ResumeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-public class SearchRestControllers {
+public class ResumeRestControllers {
 
     @Autowired
     private ResumeService resumeService;
@@ -28,7 +29,7 @@ public class SearchRestControllers {
     }
 
     @GetMapping("/resume")
-    public ResponseEntity<List<ResumeSearchResponse>> searchPage(@RequestParam String search) throws IOException {
+    public ResponseEntity<List<ResumeSearchResponse>> searchResumes(@RequestParam String search) throws IOException {
         List<ResumeSearchResponse> response = resumeService.searchResumes(search);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

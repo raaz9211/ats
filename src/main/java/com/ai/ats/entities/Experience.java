@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.elasticsearch.annotations.Mapping;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -24,5 +23,11 @@ public class Experience {
 
     @Field(type = FieldType.Text)
     private String duration;
+
+    @Field(type = FieldType.Text)
+    private String location;
+
+    @Field(type = FieldType.Text, store = true)
+    private List<String> responsibilities;
 
 }

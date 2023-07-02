@@ -18,7 +18,6 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Resume {
 
-
     @Id
     private String id;
 
@@ -31,13 +30,19 @@ public class Resume {
     @Field(type = FieldType.Text)
     private String phone;
 
+    @Field(type = FieldType.Text)
+    private String address;
+
+    @Field(type = FieldType.Text)
+    private String summary;
+
     @Field(type = FieldType.Text, store = true)
     private List<String> skills;
 
-    @Field(type = FieldType.Nested, store = true)
-    private List<Experience> experiences;
+    @Field(type = FieldType.Object, store = true)
+    private List<Experience> experience;
 
-    @Field(type = FieldType.Nested, store = true)
-    private List<Education> educations;
+    @Field(type = FieldType.Object, store = true)
+    private List<Education> education;
 
 }
