@@ -11,7 +11,6 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 @EnableElasticsearchRepositories(basePackages = "com.ai.ats.repository")
 public class ElasticsearchConfig extends ElasticsearchConfiguration {
 
-
     @Override
     public ClientConfiguration clientConfiguration() {
 

@@ -1,6 +1,7 @@
 package com.ai.ats.service;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.analysis.TokenFilter;
 import co.elastic.clients.elasticsearch._types.query_dsl.TextQueryType;
 import co.elastic.clients.elasticsearch.core.BulkRequest;
 import co.elastic.clients.elasticsearch.core.BulkResponse;
@@ -8,6 +9,7 @@ import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import co.elastic.clients.elasticsearch.indices.AnalyzeResponse;
+import co.elastic.clients.elasticsearch.indices.analyze.AnalyzeToken;
 import com.ai.ats.entities.Resume;
 import com.ai.ats.models.ResumeSearchResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -58,13 +61,39 @@ public class ResumeServiceImpl implements ResumeService {
 
         List<ResumeSearchResponse> matchedResumeList = new ArrayList<>();
 
-//        AnalyzeResponse analyzeResponse =
-//                elasticsearchClient.indices()
-//                        .analyze(ar -> ar
-//                        .text(search)
-//                                .tokenizer(tok -> tok.name("standard"))
-//                                .filter("")
+        List<TokenFilter> listoftokenfilter = new ArrayList<>();
+        listoftokenfilter.add(TokenFilter.of(tf -> tf.definition(tfd -> tfd.stop(stopf -> stopf.stopwords("a", "an", "and", "are", "as", "at", "be", "but", "by", "for", "if", "in", "into", "is",
+                "it", "no", "not", "of", "on", "or", "such", "that", "the", "their", "then", "there",
+                "these", "they", "this", "to", "was", "will", "with")))));
+        listoftokenfilter.add(
+                TokenFilter.of(tf -> tf
+                        .definition(tfd -> tfd
+                                .stemmer(stv -> stv
+                                        .language("english")
+                                )
+                        )
+                )
+
+        );
+//        listoftokenfilter.add(TokenFilter.of(tf -> tf
+//                        .definition(tfd -> tfd
+//                                .lowercase(lw -> lw
+//                                        .language("")
+//                                )
+//                        )
+//                )
 //        );
+
+        AnalyzeResponse analyzeResponse =
+                elasticsearchClient.indices()
+                        .analyze(ar -> ar
+                                .text(search)
+                                .tokenizer(tok -> tok.definition(tdf -> tdf.standard(stdt -> stdt.maxTokenLength(255))))
+                                .filter(listoftokenfilter)
+//                                .filter("lowercase")
+                        );
+
+        log.info(analyzeResponse.tokens().stream().map(AnalyzeToken::token).collect(Collectors.joining(", ")));
 
         SearchRequest searchRequest = SearchRequest.of(s -> s
                 .index(RESUME_INDEX)
