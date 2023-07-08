@@ -1,2 +1,17 @@
-server:
-  port: 8081
+#server:
+#  port: 8090
+#
+#spring:
+#  datasource:
+#    url: jdbc:postgresql://postgresql:5432/postgresdb
+#    username: resumeATS
+#    password: resume@9211
+#    driver-class-name: org.postgresql.Driver
+#  jpa:
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    hibernate:
+#      ddl-auto: update
+#
+#  elasticsearch:
+#    uris:
+#      - http://elasticsearch:9200

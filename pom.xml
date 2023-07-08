@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -11,8 +11,8 @@
 	<groupId>com.ai</groupId>
 	<artifactId>ats</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
-	<name>ATS</name>
+	<packaging>jar</packaging>
+	<name>ats</name>
 	<description>Recruitment Portal for Staffing Company</description>
 	<properties>
 		<java.version>17</java.version>
@@ -27,12 +27,7 @@
 			<artifactId>spring-boot-starter-data-elasticsearch</artifactId>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/jakarta.json/jakarta.json-api -->
-		<dependency>
-			<groupId>jakarta.json</groupId>
-			<artifactId>jakarta.json-api</artifactId>
-			<version>2.1.2</version>
-		</dependency>
+
 
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -52,7 +47,22 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>3.1.1</version>
+		</dependency>
+
 	</dependencies>
+
+
 
 	<build>
 		<plugins>
@@ -61,6 +71,10 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>
+			springbootapp
+		</finalName>
+
 	</build>
 
 </project>

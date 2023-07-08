@@ -1,0 +1,46 @@
+#version: '3.8'
+#services:
+#  elasticsearch:
+#    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.2
+#    container_name: elasticsearch
+#    environment:
+#      - discovery.type=single-node
+#      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+#      - xpack.security.enabled=false
+#    ports:
+#      - 9200:9200
+#    volumes:
+#      - elasticsearch-data:/usr/share/elasticsearch/data
+#
+#  postgresql:
+#    image: postgres:15.3-alpine
+#    container_name: postgresql
+#    environment:
+#      - POSTGRES_USER=resumeATS
+#      - POSTGRES_PASSWORD=resume@9211
+#      - POSTGRES_DB=resumeDB
+#    ports:
+#      - 5432:5432
+#    volumes:
+#      - postgresql-data:/var/lib/postgresql/data
+#
+#  springbootapp:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    container_name: springbootapp
+#    depends_on:
+#      - elasticsearch
+#      - postgresql
+#    ports:
+#      - 8090:8090
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/resumeDB
+#      - SPRING_DATASOURCE_USERNAME=resumeATS
+#      - SPRING_DATASOURCE_PASSWORD=resume@9211
+#      - ELASTICSEARCH_HOST=http://elasticsearch:9200
+#volumes:
+#  elasticsearch-data:
+#  postgresql-data:
+#
+#

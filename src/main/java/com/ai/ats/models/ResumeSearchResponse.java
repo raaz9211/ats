@@ -19,7 +19,7 @@ public class ResumeSearchResponse {
 
     private String email;
 
-    private String phone;
+    private String phoneNo;
 
     private String address;
 
@@ -27,7 +27,7 @@ public class ResumeSearchResponse {
 
     private List<String> skills;
 
-    private List<Experience> experience;
+    private List<Experience> experiences;
 
-    private List<Education> education;
+    private List<Education> educations;
 }

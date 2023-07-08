@@ -10,9 +10,15 @@ import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import co.elastic.clients.elasticsearch.indices.AnalyzeResponse;
 import co.elastic.clients.elasticsearch.indices.analyze.AnalyzeToken;
+import com.ai.ats.data.User;
+import com.ai.ats.data.UserDTO;
 import com.ai.ats.entities.Resume;
 import com.ai.ats.models.ResumeSearchResponse;
+import com.ai.ats.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+
 @Service
 @Slf4j
 public class ResumeServiceImpl implements ResumeService {
@@ -28,11 +36,15 @@ public class ResumeServiceImpl implements ResumeService {
     private final ElasticsearchClient elasticsearchClient;
 
     private static final String RESUME_INDEX = "resumes";
+    ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     public ResumeServiceImpl(ElasticsearchClient elasticsearchClient) {
         this.elasticsearchClient = elasticsearchClient;
     }
+
+    @Autowired
+    UserRepository userRepository;
 
     public boolean bulkInsertResumes(List<Resume> resumeList) throws IOException {
         BulkRequest.Builder br = new BulkRequest.Builder();
@@ -131,16 +143,88 @@ public class ResumeServiceImpl implements ResumeService {
                         object.id(),
                         object.source().getName(),
                         object.source().getEmail(),
-                        object.source().getPhone(),
+                        object.source().getPhoneNo(),
                         object.source().getAddress(),
                         object.source().getSummary(),
                         object.source().getSkills(),
-                        object.source().getExperience(),
-                        object.source().getEducation()
+                        object.source().getExperiences(),
+                        object.source().getEducations()
                 );
                 matchedResumeList.add(dto);
             }
         }
         return matchedResumeList;
+    }
+
+    public UserDTO addResume(UserDTO userDTO) {
+
+        User user;
+        try {
+            user = userRepository.save(modelMapper.map(userDTO, User.class));
+            System.out.println("User added");
+
+        } catch (Exception e) {
+            System.out.println("Add a valid User ");
+//            throw new QuestionException("Question cant saved");
+            user = new User();
+        }
+
+        return modelMapper.map(user, UserDTO.class);
+    }
+
+    public List<UserDTO> addAllResume(List<UserDTO> usersDTO) {
+
+        List<User> users;
+        try {
+            users = (List<User>) userRepository.saveAll( modelMapper.map(usersDTO,  new TypeToken<List<User>>() {
+            }.getType()));
+            System.out.println("User added");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Add a valid User ");
+
+//            throw new QuestionException("Question cant saved");
+            users = modelMapper.map(usersDTO,  new TypeToken<List<User>>() {
+            }.getType());
+        }
+
+        return modelMapper.map(users, new TypeToken<List<UserDTO>>() {
+        }.getType());
+    }
+
+    public UserDTO getResume(String username){
+        User user;
+        try {
+            user = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException());
+        } catch (Exception e){
+            user = new User();
+            System.out.println("username not found");
+        }
+        return modelMapper.map(user, UserDTO.class);
+
+    }
+    public List<UserDTO> getAllResume(){
+        List<User> users = (List<User>) userRepository.findAll();
+        return modelMapper.map(users, new TypeToken<List<UserDTO>>() {
+        }.getType());
+
+    }
+
+
+    @Transactional
+    public long deleteUser(String username){
+        long isDeleted;
+        try {
+            isDeleted = userRepository.deleteByUsername(username);
+            if(isDeleted == 0){
+                throw new IllegalArgumentException();
+            }
+            System.out.println("user deleted");
+        } catch (Exception e){
+            isDeleted = 0;
+            System.out.println("username not found");
+        }
+        return isDeleted;
     }
 }

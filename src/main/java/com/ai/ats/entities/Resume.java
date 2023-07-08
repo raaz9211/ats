@@ -28,7 +28,7 @@ public class Resume {
     private String email;
 
     @Field(type = FieldType.Text)
-    private String phone;
+    private String phoneNo;
 
     @Field(type = FieldType.Text)
     private String address;
@@ -40,9 +40,9 @@ public class Resume {
     private List<String> skills;
 
     @Field(type = FieldType.Object, store = true)
-    private List<Experience> experience;
+    private List<Experience> experiences;
 
     @Field(type = FieldType.Object, store = true)
-    private List<Education> education;
+    private List<Education> educations;
 
 }
