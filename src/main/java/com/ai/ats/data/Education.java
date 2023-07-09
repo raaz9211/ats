@@ -26,6 +26,6 @@ public class Education {
     String graduationYear;
 
     @ManyToOne
-    User user;
+    Candidate candidate;
 
 }

@@ -12,40 +12,39 @@ import java.util.List;
 
 @Component
 @Entity
-@Table(name = "users")
+@Table(name = "candidates")
 @Getter
 @Setter
 @ToString
 @Data
-public class User {
+public class Candidate {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     long id;
-    @Column(unique=true)
-    String username;
     String password;
     String name;
+    @Column(unique=true)
     String email;
     @Column(name = "phone_no")
     String phoneNo;
     String address;
     String summary;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "candidate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Experience> experiences;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "candidate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Education> educations;
 
     List<String> skills;
 
     public void setEducations(List<Education> educations) {
-        educations.forEach(education -> education.setUser(this));
+        educations.forEach(education -> education.setCandidate(this));
         this.educations = educations;
     }
 
     public void setExperiences(List<Experience> experiences) {
-        experiences.forEach(experience -> experience.setUser(this));
+        experiences.forEach(experience -> experience.setCandidate(this));
         this.experiences = experiences;
     }
 

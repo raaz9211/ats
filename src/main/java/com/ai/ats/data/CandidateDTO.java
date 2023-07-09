@@ -1,11 +1,8 @@
 package com.ai.ats.data;
 
-import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -13,10 +10,9 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class UserDTO {
+public class CandidateDTO {
 
     long id;
-    String username;
     String password;
     String name;
     String email;

@@ -28,7 +28,7 @@ public class Experience {
     List<String> responsibilities;
 
     @ManyToOne
-    User user;
+    Candidate candidate;
 
 
 

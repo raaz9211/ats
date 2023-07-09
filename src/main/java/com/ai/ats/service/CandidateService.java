@@ -10,9 +10,11 @@ import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import co.elastic.clients.elasticsearch.indices.AnalyzeResponse;
 import co.elastic.clients.elasticsearch.indices.analyze.AnalyzeToken;
-import com.ai.ats.data.User;
-import com.ai.ats.data.UserDTO;
+import com.ai.ats.data.Candidate;
+import com.ai.ats.data.CandidateDTO;
 import com.ai.ats.entities.Resume;
+import com.ai.ats.exception.CandidateException;
+import com.ai.ats.exception.CandidateNotFoundException;
 import com.ai.ats.models.ResumeSearchResponse;
 import com.ai.ats.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -31,7 +33,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class ResumeServiceImpl implements ResumeService {
+public class CandidateService {
 
     private final ElasticsearchClient elasticsearchClient;
 
@@ -39,7 +41,7 @@ public class ResumeServiceImpl implements ResumeService {
     ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
-    public ResumeServiceImpl(ElasticsearchClient elasticsearchClient) {
+    public CandidateService(ElasticsearchClient elasticsearchClient) {
         this.elasticsearchClient = elasticsearchClient;
     }
 
@@ -59,7 +61,6 @@ public class ResumeServiceImpl implements ResumeService {
         BulkResponse bulkResponse = elasticsearchClient.bulk(br.build());
 
 
-        // Log errors, if any
         if (bulkResponse.errors()) {
             log.error("Bulk had errors");
             return false;
@@ -156,75 +157,69 @@ public class ResumeServiceImpl implements ResumeService {
         return matchedResumeList;
     }
 
-    public UserDTO addResume(UserDTO userDTO) {
+    public CandidateDTO addCandidate(CandidateDTO candidateDTO) {
 
-        User user;
+        Candidate candidate;
         try {
-            user = userRepository.save(modelMapper.map(userDTO, User.class));
-            System.out.println("User added");
+            candidate = userRepository.save(modelMapper.map(candidateDTO, Candidate.class));
+            log.error("Candidate added");
 
         } catch (Exception e) {
-            System.out.println("Add a valid User ");
-//            throw new QuestionException("Question cant saved");
-            user = new User();
+            log.error("Add a valid Candidate ");
+            throw new CandidateException("Candidate cant saved");
+
         }
 
-        return modelMapper.map(user, UserDTO.class);
+        return modelMapper.map(candidate, CandidateDTO.class);
     }
 
-    public List<UserDTO> addAllResume(List<UserDTO> usersDTO) {
+    public List<CandidateDTO> addCandidates(List<CandidateDTO> usersDTO) {
 
-        List<User> users;
+        List<Candidate> candidates;
         try {
-            users = (List<User>) userRepository.saveAll( modelMapper.map(usersDTO,  new TypeToken<List<User>>() {
+            candidates = (List<Candidate>) userRepository.saveAll( modelMapper.map(usersDTO,  new TypeToken<List<Candidate>>() {
             }.getType()));
-            System.out.println("User added");
+            log.info("Candidates added");
 
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Add a valid User ");
+            log.error("Add a valid Candidates");
+            throw new CandidateException("Candidates cant saved");
 
-//            throw new QuestionException("Question cant saved");
-            users = modelMapper.map(usersDTO,  new TypeToken<List<User>>() {
-            }.getType());
+
         }
 
-        return modelMapper.map(users, new TypeToken<List<UserDTO>>() {
+        return modelMapper.map(candidates, new TypeToken<List<CandidateDTO>>() {
         }.getType());
     }
 
-    public UserDTO getResume(String username){
-        User user;
-        try {
-            user = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException());
-        } catch (Exception e){
-            user = new User();
-            System.out.println("username not found");
-        }
-        return modelMapper.map(user, UserDTO.class);
+    public CandidateDTO getCandidate(String email){
+
+        return modelMapper.map(userRepository.findByEmail(email)
+                .orElseThrow(() -> new CandidateNotFoundException("Candidate Not found with email " + email)), CandidateDTO.class);
+
 
     }
-    public List<UserDTO> getAllResume(){
-        List<User> users = (List<User>) userRepository.findAll();
-        return modelMapper.map(users, new TypeToken<List<UserDTO>>() {
+    public List<CandidateDTO> getCandidates(){
+        List<Candidate> candidates = (List<Candidate>) userRepository.findAll();
+        return modelMapper.map(candidates, new TypeToken<List<CandidateDTO>>() {
         }.getType());
 
     }
 
 
     @Transactional
-    public long deleteUser(String username){
-        long isDeleted;
+    public void deleteCandidate(String email){
+
         try {
-            isDeleted = userRepository.deleteByUsername(username);
-            if(isDeleted == 0){
+            if(userRepository.deleteByEmail(email) == 0){
                 throw new IllegalArgumentException();
             }
-            System.out.println("user deleted");
+            log.info("Candidate deleted");
         } catch (Exception e){
-            isDeleted = 0;
-            System.out.println("username not found");
+            log.error("email not found");
+            throw new CandidateNotFoundException("Candidate Not found with email " + email);
+
         }
-        return isDeleted;
+
     }
 }
