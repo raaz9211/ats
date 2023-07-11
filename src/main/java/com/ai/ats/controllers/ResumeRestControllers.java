@@ -54,7 +54,7 @@ public class ResumeRestControllers {
     }
 
     @DeleteMapping("candidate/{email}")
-    public ResponseEntity deleteCandidateByUsername(@PathVariable("email") String username) {
+    public ResponseEntity deleteCandidateByEmail(@PathVariable("email") String username) {
         candidateService.deleteCandidate(username);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

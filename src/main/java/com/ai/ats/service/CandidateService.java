@@ -185,7 +185,6 @@ public class CandidateService {
             log.error("Add a valid Candidates");
             throw new CandidateException("Candidates cant saved");
 
-
         }
 
         return modelMapper.map(candidates, new TypeToken<List<CandidateDTO>>() {
