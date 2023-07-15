@@ -1,7 +1,7 @@
 package com.ai.ats.models;
 
-import com.ai.ats.entities.Education;
-import com.ai.ats.entities.Experience;
+import com.ai.ats.entitiy.EducationEl;
+import com.ai.ats.entitiy.ExperienceEl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +27,7 @@ public class ResumeSearchResponse {
 
     private List<String> skills;
 
-    private List<Experience> experiences;
+    private List<ExperienceEl> experienceEls;
 
-    private List<Education> educations;
+    private List<EducationEl> educationEls;
 }

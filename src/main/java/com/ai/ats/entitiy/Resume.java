@@ -1,4 +1,4 @@
-package com.ai.ats.entities;
+package com.ai.ats.entitiy;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -40,9 +40,9 @@ public class Resume {
     private List<String> skills;
 
     @Field(type = FieldType.Object, store = true)
-    private List<Experience> experiences;
+    private List<ExperienceEl> experienceEls;
 
     @Field(type = FieldType.Object, store = true)
-    private List<Education> educations;
+    private List<EducationEl> educationEls;
 
 }

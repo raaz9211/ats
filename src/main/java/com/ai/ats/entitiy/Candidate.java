@@ -1,4 +1,4 @@
-package com.ai.ats.data;
+package com.ai.ats.entitiy;
 
 import jakarta.persistence.*;
 import lombok.Data;

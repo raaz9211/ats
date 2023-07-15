@@ -1,4 +1,4 @@
-package com.ai.ats.data;
+package com.ai.ats.dto;
 
 import lombok.Getter;
 import lombok.Setter;

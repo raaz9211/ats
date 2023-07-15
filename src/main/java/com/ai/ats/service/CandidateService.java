@@ -10,13 +10,13 @@ import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import co.elastic.clients.elasticsearch.indices.AnalyzeResponse;
 import co.elastic.clients.elasticsearch.indices.analyze.AnalyzeToken;
-import com.ai.ats.data.Candidate;
-import com.ai.ats.data.CandidateDTO;
-import com.ai.ats.entities.Resume;
+import com.ai.ats.entitiy.Candidate;
+import com.ai.ats.dto.CandidateDTO;
+import com.ai.ats.entitiy.Resume;
 import com.ai.ats.exception.CandidateException;
 import com.ai.ats.exception.CandidateNotFoundException;
 import com.ai.ats.models.ResumeSearchResponse;
-import com.ai.ats.repository.UserRepository;
+import com.ai.ats.repository.CandidateRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -46,7 +46,7 @@ public class CandidateService {
     }
 
     @Autowired
-    UserRepository userRepository;
+    CandidateRepository candidateRepository;
 
     public boolean bulkInsertResumes(List<Resume> resumeList) throws IOException {
         BulkRequest.Builder br = new BulkRequest.Builder();
@@ -148,8 +148,8 @@ public class CandidateService {
                         object.source().getAddress(),
                         object.source().getSummary(),
                         object.source().getSkills(),
-                        object.source().getExperiences(),
-                        object.source().getEducations()
+                        object.source().getExperienceEls(),
+                        object.source().getEducationEls()
                 );
                 matchedResumeList.add(dto);
             }
@@ -161,7 +161,7 @@ public class CandidateService {
 
         Candidate candidate;
         try {
-            candidate = userRepository.save(modelMapper.map(candidateDTO, Candidate.class));
+            candidate = candidateRepository.save(modelMapper.map(candidateDTO, Candidate.class));
             log.error("Candidate added");
 
         } catch (Exception e) {
@@ -177,7 +177,7 @@ public class CandidateService {
 
         List<Candidate> candidates;
         try {
-            candidates = (List<Candidate>) userRepository.saveAll( modelMapper.map(usersDTO,  new TypeToken<List<Candidate>>() {
+            candidates = (List<Candidate>) candidateRepository.saveAll( modelMapper.map(usersDTO,  new TypeToken<List<Candidate>>() {
             }.getType()));
             log.info("Candidates added");
 
@@ -193,13 +193,13 @@ public class CandidateService {
 
     public CandidateDTO getCandidate(String email){
 
-        return modelMapper.map(userRepository.findByEmail(email)
+        return modelMapper.map(candidateRepository.findByEmail(email)
                 .orElseThrow(() -> new CandidateNotFoundException("Candidate Not found with email " + email)), CandidateDTO.class);
 
 
     }
     public List<CandidateDTO> getCandidates(){
-        List<Candidate> candidates = (List<Candidate>) userRepository.findAll();
+        List<Candidate> candidates = (List<Candidate>) candidateRepository.findAll();
         return modelMapper.map(candidates, new TypeToken<List<CandidateDTO>>() {
         }.getType());
 
@@ -210,7 +210,7 @@ public class CandidateService {
     public void deleteCandidate(String email){
 
         try {
-            if(userRepository.deleteByEmail(email) == 0){
+            if(candidateRepository.deleteByEmail(email) == 0){
                 throw new IllegalArgumentException();
             }
             log.info("Candidate deleted");

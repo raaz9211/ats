@@ -2,10 +2,9 @@ package com.ai.ats.controllers;
 
 //import com.ai.ats.entities.Resume;
 //import com.ai.ats.models.ResumeSearchResponse;
-import com.ai.ats.data.CandidateDTO;
-import com.ai.ats.entities.Resume;
+import com.ai.ats.dto.CandidateDTO;
+import com.ai.ats.entitiy.Resume;
 import com.ai.ats.models.ResumeSearchResponse;
-import com.ai.ats.repository.UserRepository;
 import com.ai.ats.service.CandidateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

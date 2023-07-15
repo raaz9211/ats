@@ -1,4 +1,4 @@
-package com.ai.ats.entities;
+package com.ai.ats.entitiy;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Experience {
+public class ExperienceEl {
 
     @Field(type = FieldType.Text)
     private String title;

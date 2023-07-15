@@ -1,4 +1,4 @@
-package com.ai.ats.entities;
+package com.ai.ats.entitiy;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Education {
+public class EducationEl {
 
     @Field(type = FieldType.Text)
     private String degree;
