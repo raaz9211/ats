@@ -1,7 +1,6 @@
 package com.ai.ats.entitiy;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +16,10 @@ import org.springframework.stereotype.Component;
 @Data
 
 public class PurchaseOrder {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    long id;
 
     private String sold;
 

@@ -1,11 +1,7 @@
 package com.ai.ats.entitiy;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,6 +15,8 @@ public class Submission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    long id;
+
     private String submissionId;
 
     private String recruiterName;
