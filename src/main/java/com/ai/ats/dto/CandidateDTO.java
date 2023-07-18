@@ -1,15 +1,16 @@
 package com.ai.ats.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 
-@Getter
-@Setter
-@ToString
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CandidateDTO {
 
     long id;
@@ -23,6 +24,7 @@ public class CandidateDTO {
     List<ExperienceDTO> experiences;
     List<EducationDTO> educations;
     List<String> skills;
+
 
 
 }

@@ -1,16 +1,14 @@
 package com.ai.ats.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
 
 
-@Setter
-@Getter
-@ToString
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ExperienceDTO {
 
     long id;

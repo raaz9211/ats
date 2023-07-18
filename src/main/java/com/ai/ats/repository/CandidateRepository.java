@@ -1,6 +1,6 @@
 package com.ai.ats.repository;
 
-import com.ai.ats.entitiy.Candidate;
+import com.ai.ats.entity.jpa.Candidate;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

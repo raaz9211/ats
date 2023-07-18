@@ -1,33 +1,50 @@
-package com.ai.ats.entitiy;
+package com.ai.ats.entity.elastic;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ExperienceEl {
+public class Experience {
+
+    @Field(type = FieldType.Keyword)
+    @Getter
+    @Setter
+    long id;
 
     @Field(type = FieldType.Text)
+    @Getter
+    @Setter
     private String title;
 
     @Field(type = FieldType.Text)
+    @Getter 
+    @Setter
     private String company;
 
     @Field(type = FieldType.Text)
-    private String duration;
-
-    @Field(type = FieldType.Text)
+    @Getter 
+    @Setter
     private String location;
 
+    @Field(type = FieldType.Text)
+    @Getter 
+    @Setter
+    private String duration;
+
     @Field(type = FieldType.Text, store = true)
+    @Getter 
+    @Setter
     private List<String> responsibilities;
+
+    @Setter
+    private Candidate candidate;
+
+
 
 }

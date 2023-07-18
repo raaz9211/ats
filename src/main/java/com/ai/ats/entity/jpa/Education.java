@@ -1,4 +1,4 @@
-package com.ai.ats.entitiy;
+package com.ai.ats.entity.jpa;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -7,30 +7,25 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 
 @Component
 @Entity
-@Table(name = "experiences")
+@Table(name = "educations")
 @Setter
 @Getter
 @ToString
 @Data
-public class Experience {
+public class Education {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-    String title;
-    String company;
+    String degree;
+    String university;
     String location;
-    String duration;
-    List<String> responsibilities;
+    @Column(name = "graduation_year")
+    String graduationYear;
 
     @ManyToOne
     Candidate candidate;
-
-
-
 
 }

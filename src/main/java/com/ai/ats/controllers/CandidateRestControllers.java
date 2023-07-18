@@ -1,10 +1,7 @@
 package com.ai.ats.controllers;
 
-//import com.ai.ats.entities.Resume;
-//import com.ai.ats.models.ResumeSearchResponse;
 import com.ai.ats.dto.CandidateDTO;
-import com.ai.ats.entitiy.Resume;
-import com.ai.ats.models.ResumeSearchResponse;
+import com.ai.ats.service.CandidateElasticService;
 import com.ai.ats.service.CandidateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,27 +16,15 @@ import java.util.List;
 
 @RestController
 @Slf4j
-public class ResumeRestControllers {
+public class CandidateRestControllers {
 
     @Autowired
     private CandidateService candidateService;
+    @Autowired
+    private CandidateElasticService candidateElasticService;
 
 
-    @PostMapping("/resume/bulk")
-    public ResponseEntity<String> bulkInsertResumes(@RequestBody List<Resume> resumes) throws IOException {
-        boolean isSuccess = candidateService.bulkInsertResumes(resumes);
-        if(isSuccess) {
-            return ResponseEntity.ok("Records successfully ingested!");
-        } else {
-            return ResponseEntity.internalServerError().body("Oops! unable to ingest data");
-        }
-    }
 
-    @GetMapping("/resume")
-    public ResponseEntity<List<ResumeSearchResponse>> searchResumes(@RequestParam String search) throws IOException {
-        List<ResumeSearchResponse> response = candidateService.searchResumes(search);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 
     @PostMapping("candidate")
     public ResponseEntity<CandidateDTO> addCandidate(@RequestBody CandidateDTO candidateDTO) {
@@ -47,8 +32,10 @@ public class ResumeRestControllers {
 
     }
     @PostMapping("candidates")
-    public ResponseEntity<List<CandidateDTO>> addCandidates(@RequestBody List<CandidateDTO> usersDTO) {
-        return new ResponseEntity<>(candidateService.addCandidates(usersDTO),HttpStatus.CREATED);
+    public ResponseEntity<List<CandidateDTO>> addCandidates(@RequestBody List<CandidateDTO> candidatesDto) throws IOException {
+        List<CandidateDTO> candidatesDtoSQLSaved = candidateService.addCandidates(candidatesDto);
+        candidateElasticService.bulkInsertCandidates(candidatesDtoSQLSaved);
+        return new ResponseEntity<>(candidatesDtoSQLSaved,HttpStatus.CREATED);
 
     }
 
