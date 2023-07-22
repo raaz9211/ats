@@ -11,12 +11,12 @@ import java.util.List;
 @NoArgsConstructor
 public class ExperienceDTO {
 
-    long id;
-    String title;
-    String company;
-    String location;
-    String duration;
-    List<String> responsibilities;
+    private long id;
+    private String title;
+    private String company;
+    private String location;
+    private String duration;
+    private List<String> responsibilities;
 
 
 

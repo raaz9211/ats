@@ -7,6 +7,7 @@ import com.ai.ats.entity.jpa.Job;
 import com.ai.ats.entity.jpa.Submission;
 import com.ai.ats.exception.JobException;
 import com.ai.ats.exception.JobNotFoundException;
+import com.ai.ats.exception.SubmissionNotFoundException;
 import com.ai.ats.repository.JobRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +18,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 @Slf4j
 public class JobService {
 
-    ModelMapper modelMapper = new ModelMapper();
+    @Autowired
+    ModelMapper modelMapper;
 
     @Autowired
     JobRepository jobRepository;
@@ -45,29 +48,31 @@ public class JobService {
         return modelMapper.map(job, JobDTO.class);
     }
 
-    public JobDTO getJob(int jobId){
+    public JobDTO getJob(int jobId) {
 
         return modelMapper.map(jobRepository.findById(jobId)
                 .orElseThrow(() -> new JobNotFoundException("Job Not found with email " + jobId)), JobDTO.class);
 
 
     }
-    public List<JobDTO> getJobs(){
+
+    public List<JobDTO> getJobs() {
         List<Job> candidates = (List<Job>) jobRepository.findAll();
         return modelMapper.map(candidates, new TypeToken<List<JobDTO>>() {
         }.getType());
 
     }
+
     @Transactional
-    public void deleteJob(int jobId){
+    public void deleteJob(int jobId) {
 
         try {
             long t = jobRepository.deleteByJobId(jobId);
-            if(t == 0){
+            if (t == 0) {
                 throw new IllegalArgumentException();
             }
             log.info("Job deleted");
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error("Job Id not found");
             throw new JobNotFoundException("job Not found with  " + jobId);
 
@@ -75,9 +80,9 @@ public class JobService {
 
     }
 
-    public JobDTO addSubmission(int jobId, SubmissionDTO submissionDTO){
-
+    public JobDTO addSubmission(int jobId, SubmissionDTO submissionDTO) {
         JobDTO jobDTO = getJob(jobId);
+
         Job job;
         try {
             jobDTO.getSubmissions().add(submissionDTO);
@@ -94,6 +99,25 @@ public class JobService {
 
     }
 
+    public JobDTO addPurchaseOrder(int jobId, int submissionId, PurchaseOrderDTO purchaseOrderDTO) {
+        JobDTO jobDTO = getJob(jobId);
 
+        Job job;
+        try {
+            jobDTO.getSubmissions().stream().filter(submission -> submission.getSubmissionId() == submissionId).findAny()
+                    .orElseThrow(() -> new SubmissionNotFoundException("submission Not found with submission " + submissionId))
+                    .setPurchaseOrder(purchaseOrderDTO);
+
+            job = jobRepository.save(modelMapper.map(jobDTO, Job.class));
+            log.error("Submission added to jobId " + jobId);
+
+        } catch (Exception e) {
+            log.error("Submission not added to jobId " + jobId);
+            e.printStackTrace();
+            throw new JobException("Submission not added to jobId " + jobId);
+
+        }
+        return modelMapper.map(job, JobDTO.class);
+    }
 
 }

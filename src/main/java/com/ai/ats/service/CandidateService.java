@@ -22,7 +22,8 @@ public class CandidateService {
 
 
     private static final String RESUME_INDEX = "resumes";
-    ModelMapper modelMapper = new ModelMapper();
+    @Autowired
+    ModelMapper modelMapper;
 
 
     @Autowired

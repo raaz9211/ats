@@ -9,9 +9,9 @@ import lombok.ToString;
 @ToString
 public class ExceptionResponse {
 
-    String timestamp;
-    String error;
-    String status;
-    String path;
+    private String timestamp;
+    private String error;
+    private String status;
+    private String path;
 }
 

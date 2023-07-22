@@ -1,10 +1,7 @@
 package com.ai.ats.entity.jpa;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,22 +10,20 @@ import java.util.List;
 @Component
 @Entity
 @Table(name = "experiences")
-@Setter
-@Getter
-@ToString
 @Data
 public class Experience {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-    String title;
-    String company;
-    String location;
-    String duration;
-    List<String> responsibilities;
+    private String title;
+    private String company;
+    private String location;
+    private String duration;
+    private List<String> responsibilities;
 
+    @Getter(AccessLevel.NONE)
     @ManyToOne
-    Candidate candidate;
+    private Candidate candidate;
 
 
 

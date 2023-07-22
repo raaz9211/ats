@@ -14,9 +14,6 @@ import java.util.List;
 @Component
 @Entity
 @Table(name = "jobs")
-@Getter
-@Setter
-@ToString
 @Data
 public class Job {
     @Id
@@ -47,7 +44,7 @@ public class Job {
     private double salaryRate;
 
     @OneToMany(mappedBy = "job", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    List<Submission> submissions;
+    private List<Submission> submissions;
 
     public void setSubmissions(List<Submission> submissions) {
         submissions.forEach(submission -> submission.setJob(this));

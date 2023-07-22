@@ -29,5 +29,5 @@ public class SubmissionDTO {
     private double salaryRate;
     private String jobLocation;
     private String visaType;
-    private PurchaseOrder purchaseOrder;
+    private PurchaseOrderDTO purchaseOrder;
 }

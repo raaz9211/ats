@@ -28,5 +28,5 @@ public class JobDTO {
     private OffsetDateTime jobPostingDate;
     private String jobLocation;
     private double salaryRate;
-    List<SubmissionDTO> submissions;
+    private List<SubmissionDTO> submissions;
 }

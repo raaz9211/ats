@@ -10,9 +10,6 @@ import java.time.OffsetDateTime;
 @Component
 @Entity
 @Table(name = "submissions")
-@Getter
-@Setter
-@ToString
 @Data
 public class Submission {
 
@@ -59,6 +56,12 @@ public class Submission {
     @OneToOne(mappedBy = "submission", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private PurchaseOrder purchaseOrder;
 
+    @Getter(AccessLevel.NONE)
     @ManyToOne
     private Job job;
+
+    public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+        purchaseOrder.setSubmission(this);
+        this.purchaseOrder = purchaseOrder;
+    }
 }

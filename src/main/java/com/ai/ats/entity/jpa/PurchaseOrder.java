@@ -1,10 +1,7 @@
 package com.ai.ats.entity.jpa;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +10,6 @@ import java.time.OffsetDateTime;
 @Component
 @Entity
 @Table(name = "purchase_orders")
-@Getter
-@Setter
-@ToString
 @Data
 
 public class PurchaseOrder {
@@ -58,7 +52,10 @@ public class PurchaseOrder {
 
     private String documentation;
 
+
+    @Getter(AccessLevel.NONE)
+//    @Setter(AccessLevel.NONE)
     @OneToOne
-    Submission submission;
+    private Submission submission;
 
 }

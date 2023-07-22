@@ -19,23 +19,25 @@ import java.util.List;
 public class Candidate {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    long id;
-    String password;
-    String name;
-    @Column(unique=true)
-    String email;
+    private long id;
+    private String password;
+    private String name;
+
+    @Column(unique = true)
+    private String email;
+
     @Column(name = "phone_no")
-    String phoneNo;
-    String address;
-    String summary;
+    private String phoneNo;
+    private String address;
+    private String summary;
 
     @OneToMany(mappedBy = "candidate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    List<Experience> experiences;
+    private List<Experience> experiences;
 
     @OneToMany(mappedBy = "candidate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    List<Education> educations;
+    private List<Education> educations;
 
-    List<String> skills;
+    private List<String> skills;
 
     public void setEducations(List<Education> educations) {
         educations.forEach(education -> education.setCandidate(this));

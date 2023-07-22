@@ -8,11 +8,11 @@ import lombok.*;
 @NoArgsConstructor
 public class EducationDTO {
 
-    long id;
-    String degree;
-    String university;
-    String location;
-    String graduationYear;
+    private long id;
+    private String degree;
+    private String university;
+    private String location;
+    private String graduationYear;
 
 
 }

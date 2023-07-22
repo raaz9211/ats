@@ -7,24 +7,22 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CandidateDTO {
 
-    long id;
-    String password;
-    String name;
-    String email;
-    String phoneNo;
-    String address;
-    String summary;
+    private long id;
+    private String password;
+    private String name;
+    private String email;
+    private String phoneNo;
+    private String address;
+    private String summary;
 
-    List<ExperienceDTO> experiences;
-    List<EducationDTO> educations;
-    List<String> skills;
-
+    private List<ExperienceDTO> experiences;
+    private List<EducationDTO> educations;
+    private List<String> skills;
 
 
 }

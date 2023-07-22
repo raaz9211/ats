@@ -3,6 +3,7 @@ package com.ai.ats.controllers;
 //import com.ai.ats.entities.Resume;
 //import com.ai.ats.models.ResumeSearchResponse;
 import com.ai.ats.dto.JobDTO;
+import com.ai.ats.dto.PurchaseOrderDTO;
 import com.ai.ats.dto.SubmissionDTO;
 import com.ai.ats.service.JobService;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,10 @@ public class JobRestControllers {
     public ResponseEntity<JobDTO> addSubmission(@PathVariable("jobId") int jobId, @RequestBody SubmissionDTO submissionDTO) {
         System.out.println(submissionDTO);
         return new ResponseEntity<>(jobService.addSubmission(jobId, submissionDTO),HttpStatus.CREATED);
+
+    }    @PostMapping("job/{jobId}/submission/{submissionId}")
+    public ResponseEntity<JobDTO> addPurchaseOrder(@PathVariable("jobId") int jobId,@PathVariable("submissionId") int submissionId, @RequestBody PurchaseOrderDTO purchaseOrderDTO) {
+        return new ResponseEntity<>(jobService.addPurchaseOrder(jobId, submissionId, purchaseOrderDTO),HttpStatus.CREATED);
 
     }
 
