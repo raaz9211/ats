@@ -1,46 +1,64 @@
-//package com.ai.ats.entitiy;
-//
-//import jakarta.persistence.*;
-//import lombok.Data;
-//import lombok.Getter;
-//import lombok.Setter;
-//import lombok.ToString;
-//import org.springframework.stereotype.Component;
-//
-//@Component
-//@Entity
-//@Table(name = "purchaseOrder")
-//@Getter
-//@Setter
-//@ToString
-//@Data
-//
-//public class PurchaseOrder {
-//
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    long id;
-//
-//    private String sold;
-//
-//    private String recruiterName;
-//
-//    private String managerName;
-//
-//    private String jobPricingName;
-//
-//    private String candidateName;
-//
-//    private String submissionStatus;
-//
-//    private String submissionDate;
-//
-//    private String placementDate;
-//
-//    private String salary;
-//
-//    private String jobLocation;
-//
-//    private String documentation;
-//
-//}
+package com.ai.ats.entity.jpa;
+
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.stereotype.Component;
+
+import java.time.OffsetDateTime;
+
+@Component
+@Entity
+@Table(name = "purchase_orders")
+@Getter
+@Setter
+@ToString
+@Data
+
+public class PurchaseOrder {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "purchase_order_ID")
+    long purchaseOrderID;
+
+
+    @Column(name = "recruiter_name")
+    private String recruiterName;
+
+    @Column(name = "manager_name")
+    private String managerName;
+
+    @Column(name = "job_name")
+    private String jobName;
+
+    @Column(name = "candidate_name")
+    private String candidateName;
+
+    @Column(name = "submission_status")
+    private String submissionStatus;
+
+    @Column(name = "submission_date")
+    @CreationTimestamp
+    private OffsetDateTime submissionDate;
+
+
+    @Column(name = "placement_date")
+    @CreationTimestamp
+    private OffsetDateTime placementDate;
+
+    @Column(name = "salary_rate")
+    private double salaryRate;
+
+    @Column(name = "job_location")
+    private String jobLocation;
+
+    private String documentation;
+
+    @OneToOne
+    Submission submission;
+
+}

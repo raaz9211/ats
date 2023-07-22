@@ -1,10 +1,15 @@
 package com.ai.ats.dto;
 
 import com.ai.ats.entity.jpa.Submission;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -23,5 +28,5 @@ public class JobDTO {
     private OffsetDateTime jobPostingDate;
     private String jobLocation;
     private double salaryRate;
-    List<Submission> submissions;
+    List<SubmissionDTO> submissions;
 }

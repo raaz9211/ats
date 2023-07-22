@@ -2,7 +2,7 @@
 //
 //import com.ai.ats.dto.CandidateDTO;
 //import com.ai.ats.dto.SubmissionDTO;
-//import com.ai.ats.entitiy.Submission;
+//import com.ai.ats.entity.jpa.Submission;
 //import com.ai.ats.exception.CandidateException;
 //import com.ai.ats.exception.CandidateNotFoundException;
 //import com.ai.ats.exception.SubmissionNotFoundException;
@@ -18,9 +18,12 @@
 //
 //    @Autowired
 //    SubmissionRepository submissionRepository;
-//    ModelMapper modelMapper = new ModelMapper();
-//    public SubmissionDTO addSubmission(SubmissionDTO submissionDTO) {
-//
+//    @Autowired
+//    JobService jobService;
+//    @Autowired
+//    ModelMapper modelMapper;
+//    public SubmissionDTO addSubmission(int JobId, SubmissionDTO submissionDTO) {
+//        jobService.
 //        Submission submission;
 //        try {
 //            submission = submissionRepository.save(modelMapper.map(submissionDTO, Submission.class));
@@ -38,7 +41,5 @@
 //
 //        return modelMapper.map(submissionRepository.findBySubmissionId(submissionId)
 //                .orElseThrow(() -> new SubmissionNotFoundException("submission Not found with email " + submissionId)), SubmissionDTO.class);
-//
-//
 //    }
 //}

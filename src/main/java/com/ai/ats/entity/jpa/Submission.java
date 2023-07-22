@@ -56,6 +56,9 @@ public class Submission {
     @Column(name = "visa_type")
     private String visaType;
 
+    @OneToOne(mappedBy = "submission", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private PurchaseOrder purchaseOrder;
+
     @ManyToOne
     private Job job;
 }

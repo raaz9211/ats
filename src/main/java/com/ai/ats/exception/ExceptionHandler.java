@@ -15,10 +15,10 @@ public class ExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleCandidateNotFoundException(CandidateNotFoundException candidateNotFoundException, WebRequest webRequest) {
         ExceptionResponse exceptionResponse = new ExceptionResponse();
         exceptionResponse.setError(candidateNotFoundException.getMessage());
-        exceptionResponse.setStatus(HttpStatus.BAD_REQUEST.name());
+        exceptionResponse.setStatus(HttpStatus.NOT_FOUND.name());
         exceptionResponse.setTimestamp(new Date().toString());
         exceptionResponse.setPath(webRequest.getDescription(false));
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(value = CandidateException.class)
@@ -45,10 +45,10 @@ public class ExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleJobNotFoundException(JobNotFoundException jobNotFoundException, WebRequest webRequest) {
         ExceptionResponse exceptionResponse = new ExceptionResponse();
         exceptionResponse.setError(jobNotFoundException.getMessage());
-        exceptionResponse.setStatus(HttpStatus.BAD_REQUEST.name());
+        exceptionResponse.setStatus(HttpStatus.NOT_FOUND.name());
         exceptionResponse.setTimestamp(new Date().toString());
         exceptionResponse.setPath(webRequest.getDescription(false));
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
 

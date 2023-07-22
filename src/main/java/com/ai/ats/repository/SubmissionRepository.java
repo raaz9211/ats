@@ -1,7 +1,7 @@
 //package com.ai.ats.repository;
 //
-//import com.ai.ats.entitiy.Candidate;
-//import com.ai.ats.entitiy.Submission;
+//import com.ai.ats.entity.jpa.Submission;
+//
 //import org.springframework.data.repository.CrudRepository;
 //
 //import java.util.Optional;
