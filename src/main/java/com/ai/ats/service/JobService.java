@@ -79,15 +79,8 @@ public class JobService {
 
         JobDTO jobDTO = getJob(jobId);
         Job job;
-        boolean isSubmissionAdded = jobDTO.getSubmissions().add(submissionDTO);
-
-
-        if(!isSubmissionAdded){
-            throw new JobException("Submission not added to jobId " + jobId);
-        }
         try {
-
-
+            jobDTO.getSubmissions().add(submissionDTO);
             job = jobRepository.save(modelMapper.map(jobDTO, Job.class));
             log.error("Submission added to jobId " + jobId);
 
