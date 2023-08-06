@@ -20,7 +20,6 @@ public class CandidateElasticRestControllers {
     @Autowired
     private CandidateElasticService candidateElasticService;
 
-
     @PostMapping("elastic/candidates")
     public ResponseEntity<String> bulkInsertCandidates(@RequestBody List<CandidateDTO> candidatesDto) throws IOException {
         boolean isSuccess = candidateElasticService.bulkInsertCandidates(candidatesDto);

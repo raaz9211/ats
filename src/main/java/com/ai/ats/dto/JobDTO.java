@@ -1,23 +1,16 @@
 package com.ai.ats.dto;
 
-import com.ai.ats.entity.jpa.Submission;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
-
-@Getter
-@Setter
-@ToString
 @Data
 public class JobDTO {
     private long jobId;
@@ -29,4 +22,6 @@ public class JobDTO {
     private String jobLocation;
     private double salaryRate;
     private List<SubmissionDTO> submissions;
+
+
 }

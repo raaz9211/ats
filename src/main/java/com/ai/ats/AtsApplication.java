@@ -1,6 +1,8 @@
 package com.ai.ats;
 
 
+import com.ai.ats.dto.JobDTO;
+import com.ai.ats.mapper.JobMapper;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.boot.SpringApplication;
@@ -21,6 +23,8 @@ public class AtsApplication {
 		modelMapperBean.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 		return modelMapperBean;
 	}
+
+
 
 }
 

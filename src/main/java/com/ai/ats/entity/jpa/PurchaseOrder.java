@@ -11,7 +11,6 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(name = "purchase_orders")
 @Data
-
 public class PurchaseOrder {
 
     @Id
@@ -20,42 +19,21 @@ public class PurchaseOrder {
     long purchaseOrderID;
 
 
-    @Column(name = "recruiter_name")
-    private String recruiterName;
-
-    @Column(name = "manager_name")
-    private String managerName;
-
-    @Column(name = "job_name")
-    private String jobName;
-
-    @Column(name = "candidate_name")
-    private String candidateName;
-
-    @Column(name = "submission_status")
-    private String submissionStatus;
-
-    @Column(name = "submission_date")
-    @CreationTimestamp
-    private OffsetDateTime submissionDate;
-
-
     @Column(name = "placement_date")
     @CreationTimestamp
     private OffsetDateTime placementDate;
 
-    @Column(name = "salary_rate")
-    private double salaryRate;
-
-    @Column(name = "job_location")
-    private String jobLocation;
-
-    private String documentation;
-
-
     @Getter(AccessLevel.NONE)
-//    @Setter(AccessLevel.NONE)
+    @ToString.Exclude
     @OneToOne
     private Submission submission;
+    @OneToOne(mappedBy = "purchaseOrder", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Documentation documentation;
+
+    public void setDocumentation(Documentation documentation) {
+        documentation.setPurchaseOrder(this);
+        this.documentation = documentation;
+    }
+
 
 }

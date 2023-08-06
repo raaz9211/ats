@@ -18,6 +18,12 @@ public class Submission {
     @Column(name = "submission_id")
     private long submissionId;
 
+    @Column(name = "job_posting_name")
+    private String jobPostingName;
+
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "recruiter_name")
     private String recruiterName;
 
@@ -40,9 +46,9 @@ public class Submission {
     @Column(name = "job_type")
     private String jobType;
 
-    @Column(name = "placement_date")
+    @Column(name = "placement_rate")
     @CreationTimestamp
-    private OffsetDateTime placementDate;
+    private OffsetDateTime placementRate;
 
     @Column(name = "salary_rate")
     private double salaryRate;
@@ -53,10 +59,14 @@ public class Submission {
     @Column(name = "visa_type")
     private String visaType;
 
-    @OneToOne(mappedBy = "submission", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Column(name = "client")
+    private String client;
+
+    @OneToOne(mappedBy = "submission", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private PurchaseOrder purchaseOrder;
 
-    @Getter(AccessLevel.NONE)
+//    @Getter(AccessLevel.NONE)
+    @ToString.Exclude
     @ManyToOne
     private Job job;
 
@@ -64,4 +74,5 @@ public class Submission {
         purchaseOrder.setSubmission(this);
         this.purchaseOrder = purchaseOrder;
     }
+
 }

@@ -43,7 +43,7 @@ public class Job {
     @Column(name = "salary_rate")
     private double salaryRate;
 
-    @OneToMany(mappedBy = "job", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "job", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Submission> submissions;
 
     public void setSubmissions(List<Submission> submissions) {
