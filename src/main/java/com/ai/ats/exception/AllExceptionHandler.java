@@ -97,5 +97,14 @@ public class AllExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = EmailCantSendException.class)
+    public ResponseEntity<ExceptionResponse> handleEmailCantSendException(EmailCantSendException emailCantSendException, WebRequest webRequest){
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setError(emailCantSendException.getMessage());
+        exceptionResponse.setStatus(HttpStatus.BAD_REQUEST.name());
+        exceptionResponse.setTimestamp(new Date().toString());
+        exceptionResponse.setPath(webRequest.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
 
 }

@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface CandidateRepository extends CrudRepository<Candidate, Integer> {
+public interface CandidateJPARepository extends CrudRepository<Candidate, Integer> {
     Optional<Candidate> findByEmail(String email);
     long deleteByEmail(String email);
 

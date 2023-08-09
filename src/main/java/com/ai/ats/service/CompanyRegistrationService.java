@@ -2,13 +2,10 @@ package com.ai.ats.service;
 
 import com.ai.ats.dto.*;
 import com.ai.ats.entity.jpa.CompanyRegistration;
-import com.ai.ats.entity.jpa.CompanySetup;
-import com.ai.ats.entity.jpa.Job;
 import com.ai.ats.exception.*;
-import com.ai.ats.repository.CompanyRegistrationRepository;
+import com.ai.ats.repository.CompanyRegistrationJPARepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.tool.schema.spi.CommandAcceptanceException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +24,7 @@ public class CompanyRegistrationService {
     ModelMapper modelMapper;
 
     @Autowired
-    CompanyRegistrationRepository companyRegistrationRepository;
+    CompanyRegistrationJPARepository companyRegistrationJPARepository;
 
 
     public CompanyRegistrationDTO addCompanyRegistration(CompanyRegistrationDTO companyRegistrationDTO) {
@@ -37,7 +34,7 @@ public class CompanyRegistrationService {
             CompanyRegistration companyRegistrationMap  = modelMapper.map(companyRegistrationDTO, CompanyRegistration.class);
 //            companyRegistrationMap.setDStatus(companyRegistrationDTO.isDStatus());
 
-            companyRegistration = companyRegistrationRepository.save(companyRegistrationMap);
+            companyRegistration = companyRegistrationJPARepository.save(companyRegistrationMap);
             log.error("Company added");
 
         } catch (Exception e) {
@@ -51,14 +48,14 @@ public class CompanyRegistrationService {
 
     public CompanyRegistrationDTO getCompanyRegistration(int companyId) {
 
-        return modelMapper.map(companyRegistrationRepository.findById(companyId)
+        return modelMapper.map(companyRegistrationJPARepository.findById(companyId)
                 .orElseThrow(() -> new CompanyRegistrationNotFoundException("Company Registration Not found with email " + companyId)), CompanyRegistrationDTO.class);
 
 
     }
 
     public List<CompanyRegistrationDTO> getCompanyRegistrations() {
-        List<CompanyRegistration> companyRegistrations = (List<CompanyRegistration>) companyRegistrationRepository.findAll();
+        List<CompanyRegistration> companyRegistrations = (List<CompanyRegistration>) companyRegistrationJPARepository.findAll();
         return modelMapper.map(companyRegistrations, new TypeToken<List<CompanyRegistrationDTO>>() {
         }.getType());
 
@@ -68,7 +65,7 @@ public class CompanyRegistrationService {
     public void deleteCompanyRegistration(int companyId) {
 
         try {
-            long t = companyRegistrationRepository.deleteByCompanyId(companyId);
+            long t = companyRegistrationJPARepository.deleteByCompanyId(companyId);
             if (t == 0) {
                 throw new IllegalArgumentException();
             }
@@ -86,7 +83,7 @@ public class CompanyRegistrationService {
         CompanyRegistration companyRegistration;
         try {
             companyRegistrationDTO.setCompanySetup(companySetupDTO);
-            companyRegistration = companyRegistrationRepository.save(modelMapper.map(companyRegistrationDTO, CompanyRegistration.class));
+            companyRegistration = companyRegistrationJPARepository.save(modelMapper.map(companyRegistrationDTO, CompanyRegistration.class));
             log.error("CompanySetup added to companyId " + companyId);
 
         } catch (DataIntegrityViolationException e) {
@@ -110,7 +107,7 @@ public class CompanyRegistrationService {
         CompanyRegistration companyRegistration;
         try {
             companyRegistrationDTO.setCompanySetup(null);
-            companyRegistration = companyRegistrationRepository.save(modelMapper.map(companyRegistrationDTO, CompanyRegistration.class));
+            companyRegistration = companyRegistrationJPARepository.save(modelMapper.map(companyRegistrationDTO, CompanyRegistration.class));
             log.error("CompanySetup deleted to companyId " + companyId);
 
         }
@@ -129,7 +126,7 @@ public class CompanyRegistrationService {
         CompanyRegistration companyRegistration;
         try {
             companyRegistrationDTO.getCompanySetup().getEmployees().add(employeeDTO);
-            companyRegistration = companyRegistrationRepository.save(modelMapper.map(companyRegistrationDTO, CompanyRegistration.class));
+            companyRegistration = companyRegistrationJPARepository.save(modelMapper.map(companyRegistrationDTO, CompanyRegistration.class));
             log.error(" employee added to companyId " + companyId);
 
         }catch (DataIntegrityViolationException e){
@@ -197,7 +194,7 @@ public class CompanyRegistrationService {
         CompanyRegistration companyRegistration;
         try {
             boolean isEmployee = companyRegistrationDTO.getCompanySetup().getEmployees().removeIf(employee -> employee.getEmpId() == employeeId);
-            companyRegistration = companyRegistrationRepository.save(modelMapper.map(companyRegistrationDTO, CompanyRegistration.class));
+            companyRegistration = companyRegistrationJPARepository.save(modelMapper.map(companyRegistrationDTO, CompanyRegistration.class));
             log.error("employee removed to companyId " + companyId);
             if(!isEmployee){
                 throw new IllegalArgumentException();

@@ -4,7 +4,7 @@ import com.ai.ats.entity.jpa.Candidate;
 import com.ai.ats.dto.CandidateDTO;
 import com.ai.ats.exception.CandidateException;
 import com.ai.ats.exception.CandidateNotFoundException;
-import com.ai.ats.repository.CandidateRepository;
+import com.ai.ats.repository.CandidateJPARepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -27,13 +27,13 @@ public class CandidateService {
 
 
     @Autowired
-    CandidateRepository candidateRepository;
+    CandidateJPARepository candidateJPARepository;
 
     public CandidateDTO addCandidate(CandidateDTO candidateDTO) {
 
         Candidate candidate;
         try {
-            candidate = candidateRepository.save(modelMapper.map(candidateDTO, Candidate.class));
+            candidate = candidateJPARepository.save(modelMapper.map(candidateDTO, Candidate.class));
             log.error("Candidate added");
 
         } catch (Exception e) {
@@ -49,7 +49,7 @@ public class CandidateService {
 
         List<Candidate> candidates;
         try {
-            candidates = (List<Candidate>) candidateRepository.saveAll( modelMapper.map(usersDTO,  new TypeToken<List<Candidate>>() {
+            candidates = (List<Candidate>) candidateJPARepository.saveAll( modelMapper.map(usersDTO,  new TypeToken<List<Candidate>>() {
             }.getType()));
             log.info("Candidates added");
 
@@ -65,13 +65,13 @@ public class CandidateService {
 
     public CandidateDTO getCandidate(String email){
 
-        return modelMapper.map(candidateRepository.findByEmail(email)
+        return modelMapper.map(candidateJPARepository.findByEmail(email)
                 .orElseThrow(() -> new CandidateNotFoundException("Candidate Not found with email " + email)), CandidateDTO.class);
 
 
     }
     public List<CandidateDTO> getCandidates(){
-        List<Candidate> candidates = (List<Candidate>) candidateRepository.findAll();
+        List<Candidate> candidates = (List<Candidate>) candidateJPARepository.findAll();
         return modelMapper.map(candidates, new TypeToken<List<CandidateDTO>>() {
         }.getType());
 
@@ -82,7 +82,7 @@ public class CandidateService {
     public void deleteCandidate(String email){
 
         try {
-            if(candidateRepository.deleteByEmail(email) == 0){
+            if(candidateJPARepository.deleteByEmail(email) == 0){
                 throw new IllegalArgumentException();
             }
             log.info("Candidate deleted");

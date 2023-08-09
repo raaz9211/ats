@@ -8,9 +8,8 @@ import com.ai.ats.entity.jpa.Job;
 import com.ai.ats.exception.JobException;
 import com.ai.ats.exception.JobNotFoundException;
 import com.ai.ats.exception.SubmissionNotFoundException;
-import com.ai.ats.mapper.JobMapper;
-import com.ai.ats.repository.JobRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.ai.ats.mapper.JobMapper;
+import com.ai.ats.repository.JobJPARepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -32,17 +30,17 @@ public class JobService {
     ModelMapper modelMapper;
 
     @Autowired
-    JobRepository jobRepository;
+    JobJPARepository jobJPARepository;
 
-    @Autowired
-    JobMapper jobMapper;
+//    @Autowired
+//    JobMapper jobMapper;
 
 
     public JobDTO addJob(JobDTO jobDTO) {
         jobDTO.setSubmissions(new ArrayList<>());
         Job job;
         try {
-            job = jobRepository.save(modelMapper.map(jobDTO, Job.class));
+            job = jobJPARepository.save(modelMapper.map(jobDTO, Job.class));
             log.error("job added");
 
         } catch (Exception e) {
@@ -56,14 +54,14 @@ public class JobService {
 
     public JobDTO getJob(int jobId) {
 
-        return modelMapper.map(jobRepository.findById(jobId)
+        return modelMapper.map(jobJPARepository.findById(jobId)
                 .orElseThrow(() -> new JobNotFoundException("Job Not found with email " + jobId)), JobDTO.class);
 
 
     }
 
     public List<JobDTO> getJobs() {
-        List<Job> candidates = (List<Job>) jobRepository.findAll();
+        List<Job> candidates = (List<Job>) jobJPARepository.findAll();
         return modelMapper.map(candidates, new TypeToken<List<JobDTO>>() {
         }.getType());
 
@@ -73,7 +71,7 @@ public class JobService {
     public void deleteJob(int jobId) {
 
         try {
-            long t = jobRepository.deleteByJobId(jobId);
+            long t = jobJPARepository.deleteByJobId(jobId);
             if (t == 0) {
                 throw new IllegalArgumentException();
             }
@@ -90,10 +88,10 @@ public class JobService {
     public JobDTO updateJob(int jobId, JobDTO jobDTO){
         JobDTO job = getJob(jobId);
         Job jobUpdated;
-        jobMapper.updateJobDTO(jobDTO, job);
+//        jobMapper.updateJobDTO(jobDTO, job);
         System.out.println(jobDTO);
         try {
-            jobUpdated = jobRepository.save(modelMapper.map(job, Job.class));
+            jobUpdated = jobJPARepository.save(modelMapper.map(job, Job.class));
             log.error("job updated");
 
         } catch (Exception e) {
@@ -109,7 +107,7 @@ public class JobService {
         Job job;
         try {
             jobDTO.getSubmissions().add(submissionDTO);
-            job = jobRepository.save(modelMapper.map(jobDTO, Job.class));
+            job = jobJPARepository.save(modelMapper.map(jobDTO, Job.class));
             log.error("Submission added to jobId " + jobId);
 
         } catch (Exception e) {
@@ -131,7 +129,7 @@ public class JobService {
                 throw new IllegalArgumentException();
 
             }
-            job = jobRepository.save(modelMapper.map(jobDTO, Job.class));
+            job = jobJPARepository.save(modelMapper.map(jobDTO, Job.class));
             log.error("Submission deleted to jobId " + jobId);
 
         } catch (IllegalArgumentException e) {
@@ -156,7 +154,7 @@ public class JobService {
                     .orElseThrow(() -> new SubmissionNotFoundException("submission Not found with submission " + submissionId))
                     .setPurchaseOrder(purchaseOrderDTO);
 
-            job = jobRepository.save(modelMapper.map(jobDTO, Job.class));
+            job = jobJPARepository.save(modelMapper.map(jobDTO, Job.class));
 
 
         }catch (SubmissionNotFoundException e){
@@ -186,7 +184,7 @@ public class JobService {
                     .orElseThrow(() -> new SubmissionNotFoundException("submission Not found with submission " + submissionId))
                     .setPurchaseOrder(null);
 
-            job = jobRepository.save(modelMapper.map(jobDTO, Job.class));
+            job = jobJPARepository.save(modelMapper.map(jobDTO, Job.class));
             log.error("PurchaseOrder deleted to jobId " + jobId);
 
         }
@@ -208,7 +206,7 @@ public class JobService {
                     .getPurchaseOrder()
                     .setDocumentation(documentationDTO);
             System.out.println(modelMapper.map(jobDTO, Job.class));
-            job = jobRepository.save(modelMapper.map(jobDTO, Job.class));
+            job = jobJPARepository.save(modelMapper.map(jobDTO, Job.class));
             log.error("documentation added to jobId " + jobId);
 
         } catch (NullPointerException e){
@@ -238,7 +236,7 @@ public class JobService {
                     .orElseThrow(() -> new SubmissionNotFoundException("submission Not found with submission " + submissionId))
                     .getPurchaseOrder()
                     .setDocumentation(null);
-            job = jobRepository.save(modelMapper.map(jobDTO, Job.class));
+            job = jobJPARepository.save(modelMapper.map(jobDTO, Job.class));
             log.error("documentation deleted to jobId " + jobId);
 
         } catch (NullPointerException e){
