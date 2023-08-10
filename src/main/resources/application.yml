@@ -15,3 +15,14 @@
 #  elasticsearch:
 #    uris:
 #      - http://elasticsearch:9200
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: mainhuatul@gmail.com
+#    password: ttnuorsmaubmkxia
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true

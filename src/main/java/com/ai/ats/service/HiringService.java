@@ -1,6 +1,6 @@
 package com.ai.ats.service;
 
-import com.ai.ats.dto.Hiring;
+import com.ai.ats.dto.HiringDTO;
 import com.ai.ats.exception.EmailCantSendException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
@@ -20,19 +20,19 @@ public class HiringService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendBulkHiringMail(List<Hiring> hirings) {
+    public void sendBulkHiringMail(List<HiringDTO> hiringDTOS) {
 
-        for (Hiring hiring : hirings) {
+        for (HiringDTO hiringDTO : hiringDTOS) {
 
                 SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-                simpleMailMessage.setFrom(hiring.getSenderEmail());
-                simpleMailMessage.setTo(hiring.getCandidateEmail());
-                simpleMailMessage.setText(hiring.getCandidateJobDescription());
-                simpleMailMessage.setSubject(hiring.getCandidateSubject());
+                simpleMailMessage.setFrom(hiringDTO.getSenderEmail());
+                simpleMailMessage.setTo(hiringDTO.getCandidateEmail());
+                simpleMailMessage.setText(hiringDTO.getCandidateJobDescription());
+                simpleMailMessage.setSubject(hiringDTO.getCandidateSubject());
             try {
                 javaMailSender.send(simpleMailMessage);
             }catch (MailException e){
-                throw new EmailCantSendException("Email not send to " + hiring.getCandidateEmail());
+                throw new EmailCantSendException("Email not send to " + hiringDTO.getCandidateEmail());
             }
         }
     }
