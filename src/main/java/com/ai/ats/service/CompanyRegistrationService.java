@@ -82,6 +82,9 @@ public class CompanyRegistrationService {
         CompanyRegistrationDTO companyRegistrationDTO = getCompanyRegistration(companyId);
         CompanyRegistration companyRegistration;
         try {
+            if(companyRegistrationDTO.getCompanySetup() != null){
+                throw new DataIntegrityViolationException("CompanySetup is already present ");
+            }
             companyRegistrationDTO.setCompanySetup(companySetupDTO);
             companyRegistration = companyRegistrationJPARepository.save(modelMapper.map(companyRegistrationDTO, CompanyRegistration.class));
             log.error("CompanySetup added to companyId " + companyId);
@@ -89,7 +92,7 @@ public class CompanyRegistrationService {
         } catch (DataIntegrityViolationException e) {
             log.error("CompanySetup is already present " + companyId);
             e.printStackTrace();
-            throw new CompanyRegistrationException("CompanySetup is already present" + companyId);
+            throw new CompanySetupException("CompanySetup is already present " + companyId);
 
         }
         catch (Exception e) {
@@ -106,9 +109,19 @@ public class CompanyRegistrationService {
         CompanyRegistrationDTO companyRegistrationDTO = getCompanyRegistration(companyId);
         CompanyRegistration companyRegistration;
         try {
+
+            if(companyRegistrationDTO.getCompanySetup() == null){
+                throw new DataIntegrityViolationException("CompanySetup is not present ");
+            }
             companyRegistrationDTO.setCompanySetup(null);
             companyRegistration = companyRegistrationJPARepository.save(modelMapper.map(companyRegistrationDTO, CompanyRegistration.class));
             log.error("CompanySetup deleted to companyId " + companyId);
+
+        }
+        catch (DataIntegrityViolationException e) {
+            log.error("CompanySetup is already present " + companyId);
+            e.printStackTrace();
+            throw new CompanySetupNotFoundException("CompanySetup is not present" + companyId);
 
         }
         catch (Exception e) {
@@ -130,7 +143,7 @@ public class CompanyRegistrationService {
             log.error(" employee added to companyId " + companyId);
 
         }catch (DataIntegrityViolationException e){
-            log.error("employee already present in " + companyId);
+            log.error("employee not present in " + companyId);
             e.printStackTrace();
             throw new EmployeeException("employee already present in " + companyId);
 

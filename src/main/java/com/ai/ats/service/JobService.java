@@ -5,9 +5,7 @@ import com.ai.ats.dto.JobDTO;
 import com.ai.ats.dto.PurchaseOrderDTO;
 import com.ai.ats.dto.SubmissionDTO;
 import com.ai.ats.entity.jpa.Job;
-import com.ai.ats.exception.JobException;
-import com.ai.ats.exception.JobNotFoundException;
-import com.ai.ats.exception.SubmissionNotFoundException;
+import com.ai.ats.exception.*;
 //import com.ai.ats.mapper.JobMapper;
 import com.ai.ats.repository.JobJPARepository;
 import jakarta.transaction.Transactional;
@@ -31,9 +29,6 @@ public class JobService {
 
     @Autowired
     JobJPARepository jobJPARepository;
-
-//    @Autowired
-//    JobMapper jobMapper;
 
 
     public JobDTO addJob(JobDTO jobDTO) {
@@ -88,8 +83,7 @@ public class JobService {
     public JobDTO updateJob(int jobId, JobDTO jobDTO){
         JobDTO job = getJob(jobId);
         Job jobUpdated;
-//        jobMapper.updateJobDTO(jobDTO, job);
-        System.out.println(jobDTO);
+
         try {
             jobUpdated = jobJPARepository.save(modelMapper.map(job, Job.class));
             log.error("job updated");
@@ -150,9 +144,12 @@ public class JobService {
 
         Job job;
         try {
-            jobDTO.getSubmissions().stream().filter(submission -> submission.getSubmissionId() == submissionId).findAny()
-                    .orElseThrow(() -> new SubmissionNotFoundException("submission Not found with submission " + submissionId))
-                    .setPurchaseOrder(purchaseOrderDTO);
+            SubmissionDTO getSubmissionDTO = jobDTO.getSubmissions().stream().filter(submission -> submission.getSubmissionId() == submissionId).findAny()
+                    .orElseThrow(() -> new SubmissionNotFoundException("submission Not found with submission " + submissionId));
+            if(getSubmissionDTO.getPurchaseOrder() != null){
+                throw new DataIntegrityViolationException("PurchaseOrder is already present");
+            }
+            getSubmissionDTO.setPurchaseOrder(purchaseOrderDTO);
 
             job = jobJPARepository.save(modelMapper.map(jobDTO, Job.class));
 
@@ -180,18 +177,25 @@ public class JobService {
 
         Job job;
         try {
-            jobDTO.getSubmissions().stream().filter(submission -> submission.getSubmissionId() == submissionId).findAny()
-                    .orElseThrow(() -> new SubmissionNotFoundException("submission Not found with submission " + submissionId))
-                    .setPurchaseOrder(null);
+            SubmissionDTO getSubmissionDTO = jobDTO.getSubmissions().stream().filter(submission -> submission.getSubmissionId() == submissionId).findAny()
+                    .orElseThrow(() -> new SubmissionNotFoundException("submission Not found with submission " + submissionId));
+            if(getSubmissionDTO.getPurchaseOrder() == null){
+                throw new PurchaseOrderNotFoundException("PurchaseOrder not present");
+            }
+            getSubmissionDTO.setPurchaseOrder(null);
 
             job = jobJPARepository.save(modelMapper.map(jobDTO, Job.class));
             log.error("PurchaseOrder deleted to jobId " + jobId);
 
         }
+        catch (PurchaseOrderNotFoundException e){
+            log.error("PurchaseOrder not present");
+            throw new PurchaseOrderNotFoundException("PurchaseOrder not present");
+        }
         catch (Exception e) {
-            log.error("PurchaseOrder not added to jobId " + jobId);
+            log.error("PurchaseOrder not deleted to jobId " + jobId);
             e.printStackTrace();
-            throw new JobException("PurchaseOrder not added to jobId " + jobId);
+            throw new JobException("PurchaseOrder not deleted to jobId " + jobId);
 
         }
         return modelMapper.map(job, JobDTO.class);
@@ -201,18 +205,26 @@ public class JobService {
 
         Job job;
         try {
-            jobDTO.getSubmissions().stream().filter(submission -> submission.getSubmissionId() == submissionId).findAny()
-                    .orElseThrow(() -> new SubmissionNotFoundException("submission Not found with submission " + submissionId))
-                    .getPurchaseOrder()
-                    .setDocumentation(documentationDTO);
-            System.out.println(modelMapper.map(jobDTO, Job.class));
+            SubmissionDTO getSubmissionDTO = jobDTO.getSubmissions().stream().filter(submission -> submission.getSubmissionId() == submissionId).findAny()
+                    .orElseThrow(() -> new SubmissionNotFoundException("submission Not found with submission " + submissionId));
+
+            if(getSubmissionDTO.getPurchaseOrder() == null){
+                throw new PurchaseOrderNotFoundException("PurchaseOrder is not present");
+            }
+
+            if(getSubmissionDTO.getPurchaseOrder().getDocumentation() != null){
+                throw new DataIntegrityViolationException("documentation is already present");
+            }
+
+            getSubmissionDTO.getPurchaseOrder().setDocumentation(documentationDTO);
+
             job = jobJPARepository.save(modelMapper.map(jobDTO, Job.class));
             log.error("documentation added to jobId " + jobId);
 
-        } catch (NullPointerException e){
+        } catch (PurchaseOrderNotFoundException e){
             log.error("PurchaseOrder is not present ");
             e.printStackTrace();
-            throw new JobException("PurchaseOrder is not present");
+            throw new PurchaseOrderNotFoundException("PurchaseOrder is not present");
         }
         catch (DataIntegrityViolationException e){
             log.error("documentation is already present ");
@@ -232,17 +244,31 @@ public class JobService {
 
         Job job;
         try {
-            jobDTO.getSubmissions().stream().filter(submission -> submission.getSubmissionId() == submissionId).findAny()
-                    .orElseThrow(() -> new SubmissionNotFoundException("submission Not found with submission " + submissionId))
-                    .getPurchaseOrder()
-                    .setDocumentation(null);
+            SubmissionDTO getSubmissionDTO = jobDTO.getSubmissions().stream().filter(submission -> submission.getSubmissionId() == submissionId).findAny()
+                    .orElseThrow(() -> new SubmissionNotFoundException("submission Not found with submission " + submissionId));
+
+            if(getSubmissionDTO.getPurchaseOrder() == null){
+                throw new PurchaseOrderNotFoundException("PurchaseOrder is not present");
+            }
+
+            if(getSubmissionDTO.getPurchaseOrder().getDocumentation() == null){
+                throw new DocumentationNotFoundException("documentation not present");
+            }
+
+            getSubmissionDTO.getPurchaseOrder().setDocumentation(null);
+
             job = jobJPARepository.save(modelMapper.map(jobDTO, Job.class));
             log.error("documentation deleted to jobId " + jobId);
 
-        } catch (NullPointerException e){
+        } catch (PurchaseOrderNotFoundException e){
             log.error("PurchaseOrder is not present ");
             e.printStackTrace();
-            throw new JobException("PurchaseOrder is not present");
+            throw new PurchaseOrderNotFoundException("PurchaseOrder is not present");
+        }
+         catch (DocumentationNotFoundException e){
+            log.error("PurchaseOrder is not present ");
+            e.printStackTrace();
+            throw new DocumentationNotFoundException("documentation not present");
         }
         catch (Exception e) {
             log.error("documentation not deleted to jobId " + jobId);

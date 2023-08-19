@@ -107,4 +107,41 @@ public class AllExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = DocumentationNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleDocumentationNotFoundException(DocumentationNotFoundException documentationNotFoundException, WebRequest webRequest) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setError(documentationNotFoundException.getMessage());
+        exceptionResponse.setStatus(HttpStatus.NOT_FOUND.name());
+        exceptionResponse.setTimestamp(new Date().toString());
+        exceptionResponse.setPath(webRequest.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(value = PurchaseOrderNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handlePurchaseOrderNotFoundException(PurchaseOrderNotFoundException purchaseOrderNotFoundException, WebRequest webRequest) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setError(purchaseOrderNotFoundException.getMessage());
+        exceptionResponse.setStatus(HttpStatus.NOT_FOUND.name());
+        exceptionResponse.setTimestamp(new Date().toString());
+        exceptionResponse.setPath(webRequest.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(value = CompanySetupNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleCompanySetupNotFoundException(CompanySetupNotFoundException companySetupNotFoundException, WebRequest webRequest) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setError(companySetupNotFoundException.getMessage());
+        exceptionResponse.setStatus(HttpStatus.NOT_FOUND.name());
+        exceptionResponse.setTimestamp(new Date().toString());
+        exceptionResponse.setPath(webRequest.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(value = CompanySetupException.class)
+    public ResponseEntity<ExceptionResponse> handleCompanySetupException(CompanySetupException companySetupException, WebRequest webRequest) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setError(companySetupException.getMessage());
+        exceptionResponse.setStatus(HttpStatus.BAD_REQUEST.name());
+        exceptionResponse.setTimestamp(new Date().toString());
+        exceptionResponse.setPath(webRequest.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
 }
