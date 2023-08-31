@@ -13,14 +13,14 @@ import java.util.List;
 
 @Data
 public class JobDTO {
-    private long jobId;
+    private Long jobId;
     private String jobName;
     private String jobDescription;
     private String managerName;
     private String recruiterName;
     private OffsetDateTime jobPostingDate;
     private String jobLocation;
-    private double salaryRate;
+    private Double salaryRate;
     private List<SubmissionDTO> submissions;
 
 

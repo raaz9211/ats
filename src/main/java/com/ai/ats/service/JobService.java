@@ -30,6 +30,8 @@ public class JobService {
     @Autowired
     JobJPARepository jobJPARepository;
 
+//    @Autowired
+//    JobMapper jobMapper;
 
     public JobDTO addJob(JobDTO jobDTO) {
         jobDTO.setSubmissions(new ArrayList<>());
@@ -82,18 +84,24 @@ public class JobService {
 
     public JobDTO updateJob(int jobId, JobDTO jobDTO){
         JobDTO job = getJob(jobId);
-        Job jobUpdated;
 
+        Job jobUpdated;
+//        jobMapper.updateJobDTO(jobDTO, job);
+        Job t = modelMapper.map(job, Job.class);
+        System.out.println(job.getJobId());
         try {
-            jobUpdated = jobJPARepository.save(modelMapper.map(job, Job.class));
+            jobUpdated = jobJPARepository.save(t);
             log.error("job updated");
 
         } catch (Exception e) {
             log.error("Add a valid job ");
+            e.printStackTrace();
             throw new JobException("job cant updated");
 
+
         }
-        return modelMapper.map(jobUpdated, JobDTO.class);
+        return  jobDTO;
+//        return modelMapper.map(t, JobDTO.class);
     }
 
     public JobDTO addSubmission(int jobId, SubmissionDTO submissionDTO) {
